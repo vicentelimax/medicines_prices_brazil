@@ -2,6 +2,13 @@ import requests
 import pandas as pd
 
 def process_data_from_url(xls_url):
+    """Create a pandas DataFrame from an Excel file hosted on the CMED/ANVISA
+    Also, set the header row and drop rows above it.
+    args:
+        xls_url: str
+    return: 
+        pandas DataFrame
+    """
     xls_response = requests.get(xls_url)
     
     # Read the Excel file into a pandas DataFrame

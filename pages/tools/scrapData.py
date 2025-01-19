@@ -2,6 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 
 def get_data_url_from_anvisa():
+    """Get the URL of the Excel file from the ANVISA website
+    return: 
+        bs4 link object: str
+    """
     url = "https://www.gov.br/anvisa/pt-br/assuntos/medicamentos/cmed/precos"
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')

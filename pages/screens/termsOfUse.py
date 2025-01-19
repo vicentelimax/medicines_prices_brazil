@@ -1,7 +1,15 @@
 import streamlit as st
 
-# Function to initialize session state variables
 def initialize_session_state():
+    """
+    Initialize the session state variables.
+    This function checks if certain keys are present in the Streamlit session state.
+    If the keys are not present, it initializes them with default values.
+    - "agreed": A boolean indicating whether the user has agreed to the terms of use.
+      Default value is False.
+    - "current_page": A string indicating the current page the user is on.
+      Default value is "Termos de Uso".
+    """
     if "agreed" not in st.session_state:
         st.session_state.agreed = False
     if "current_page" not in st.session_state:
