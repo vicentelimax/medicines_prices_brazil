@@ -1,44 +1,38 @@
 import streamlit as st
 
 # Import modules
-from source.scrapData import get_data_url_from_anvisa
-from source.processDataFrame import process_data_from_url
-from source.filterSelectBox import apply_filter_select_box
+from utils import local_css
+from pages.screens.home import home
+from pages.screens.termsOfUse import change_state, initialize_session_state, terms_of_use
 
-st.title('Calculadora de Custos com Medicametos para Doenças Inflamatórias')
+# Initialize session state variables
+initialize_session_state()
 
-st.text("First Commit")
+pages = {
+    "Inicio": home,
+}
 
-# Cache the data loading function
-@st.cache_data
-def load_data():
-    data = get_data_url_from_anvisa()
-    return process_data_from_url(data)
+def main():
+    # Set page configuration
+    st.set_page_config(
+        page_title="Calc Custos com Medicamentos",
+        page_icon="💊",
+        layout="centered",
+        initial_sidebar_state="expanded",
+    )
+    # Load custom CSS
+    local_css("style.css")
 
-# Display a loading message while data is being loaded
-with st.spinner('Carregando dados de preços de medicamentos...'):
-    df = load_data()
-st.success('Dados carregados com sucesso! Fonte: CMED, ANIVSA')
+    # Check agreement before allowing access to other pages
+    if not st.session_state.agreed:
+        terms_of_use()
+    else:
+        # Sidebar navigation
+        page = st.sidebar.radio("Navegação", list(pages.keys()), index=list(pages.keys()).index(st.session_state.current_page))
+        change_state("Inicio", page)  # Save the current page in session state
+        # Render the selected page
+        pages[page]()
 
-# Filter by "SUBSTÂNCIA"
-filtered_df = apply_filter_select_box('SUBSTÂNCIA', df)
-
-# Filter by "LABORATÓRIO"
-filtered_df = apply_filter_select_box('LABORATÓRIO', filtered_df)
-
-# Filter by "APRESENTAÇÃO"
-filtered_df = apply_filter_select_box('APRESENTAÇÃO', filtered_df)
-
-# Filter by "ICMS"
-columns = df.loc[:, 'PF Sem Impostos':'PMC 22% ALC'].columns
-selected_column = st.selectbox('Selecione a Coluna:', columns)
-
-# Display the filtered data with the selected column
-filtered_df = filtered_df[['PRODUTO','APRESENTAÇÃO', selected_column]]
-
-st.write(filtered_df)
-
-
-# Display the filtered data
-#st.write(filtered_df)
-
+# Run the app
+if __name__ == "__main__":
+    main()
