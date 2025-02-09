@@ -4,12 +4,14 @@ import streamlit as st
 from utils import local_css
 from pages.screens.home import home
 from pages.screens.termsOfUse import change_state, initialize_session_state, terms_of_use
+from pages.screens.calc import calc
 
 # Initialize session state variables
 initialize_session_state()
 
 pages = {
     "Inicio": home,
+    "Calc": calc,
 }
 
 def main():

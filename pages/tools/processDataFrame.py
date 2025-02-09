@@ -18,7 +18,6 @@ def process_data_from_url(xls_url):
     header_row_index = df[df.iloc[:, 0] == "SUBSTÂNCIA"].index[0]
     
     # Set the header row and drop rows above it
-     
     df.columns = df.iloc[header_row_index]
     df = df.drop(range(header_row_index + 1)).reset_index(drop=True)
     return df

@@ -4,12 +4,10 @@ import streamlit as st
 from pages.tools.scrapData import get_data_url_from_anvisa
 from pages.tools.processDataFrame import process_data_from_url
 from pages.tools.filterSelectBox import apply_filter_select_box
-
+from pages.tools.filter_state import apply_state_filter
 
 def home():
-    st.title('Calculadora de Custos com Medicametos para Doenças Inflamatórias')
-
-    st.text("First Commit")
+    st.header('Consulta de preços de Medicamentos CMED/ANVISA')
 
     # Cache the data loading function
     @st.cache_data
@@ -31,16 +29,25 @@ def home():
     # Filter by "APRESENTAÇÃO"
     filtered_df = apply_filter_select_box('APRESENTAÇÃO', filtered_df)
 
+    # Filter by State/ICMS
+    column_to_filter_tax_state = apply_state_filter(filtered_df)
+    filtered_df = filtered_df[['PRODUTO','APRESENTAÇÃO', column_to_filter_tax_state]]
+    
+    '''
     # Filter by "ICMS"
     columns = df.loc[:, 'PF Sem Impostos':'PMC 22% ALC'].columns
     selected_column = st.selectbox('Selecione a Coluna:', columns)
 
     # Display the filtered data with the selected column
     filtered_df = filtered_df[['PRODUTO','APRESENTAÇÃO', selected_column]]
+    '''
 
-    st.write(filtered_df)
+    st.write(filtered_df.reset_index(drop=True))
 
     st.write("Disponível em: https://www.gov.br/anvisa/pt-br/assuntos/medicamentos/cmed/precos")
+
+    if st.button("Ir para Calculadora"):
+        st.switch_page("calc")
     
 
 
