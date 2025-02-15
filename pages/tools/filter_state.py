@@ -1,8 +1,7 @@
 import streamlit as st
-import json
 
 # import data about tax and state.
-from pages.tools.tax_state import load_tax_data
+from pages.tools.data_tax_state import load_tax_data
 
 def load_tax_data_by_state():
     try:
