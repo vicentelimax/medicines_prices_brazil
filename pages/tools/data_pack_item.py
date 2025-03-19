@@ -22,6 +22,7 @@ def data_pack_item():
         "BOLS PLAS TRANS SIST FECH",
         "BOMBO PLAS OPC",
         "BOMBO PLAS TRANSL",
+        "CANETA PREENCH"
         "CAR VD TRANS",
         "CIL AL",
         "CIL MET",
