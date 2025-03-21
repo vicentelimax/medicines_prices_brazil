@@ -1,20 +1,13 @@
 import streamlit as st
 
 # Import modules
-from pages.tools.scrapData import get_data_url_from_anvisa
-from pages.tools.processDataFrame import process_data_from_url
+from pages.tools.share_data import load_data
 from pages.tools.filterSelectBox import apply_filter_select_box
 from pages.tools.filter_state import apply_state_filter
 from pages.tools.factor_price import add_factor_price
-
+from pages.tools.share_data import transport_filtered_dataframes_index
 def home():
     st.header('Consulta de preços de Medicamentos CMED/ANVISA')
-
-    # Cache the data loading function
-    @st.cache_data
-    def load_data():
-        data = get_data_url_from_anvisa()
-        return process_data_from_url(data)
 
     # Display a loading message while data is being loaded
     with st.spinner('Carregando dados de preços de medicamentos...'):
@@ -42,9 +35,11 @@ def home():
 
     # Display the filtered data with the selected column
     filtered_df = filtered_df[['PRODUTO','APRESENTAÇÃO', column_to_filter_tax_state, 'fator']]
- 
-
+    
     st.write(filtered_df.reset_index(drop=True))
+
+    # Transport index of filtered dataframe to calc page
+    st.button("Carregar na Calculadora", on_click=transport_filtered_dataframes_index(filtered_df), args=(filtered_df,))
 
     st.write("Disponível em: https://www.gov.br/anvisa/pt-br/assuntos/medicamentos/cmed/precos")
 
