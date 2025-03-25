@@ -51,7 +51,7 @@ def terms_of_use():
         """, unsafe_allow_html=True)
 
 
-
+        # Logic to show the buttons and changes the session state variables
         if st.session_state.show_agree_buttons:
             col1, col2 = st.columns(2, gap='small', vertical_alignment='top')
             with col1:
@@ -59,13 +59,15 @@ def terms_of_use():
                     st.session_state.show_agree_buttons = False
                     st.session_state.agreed = True
                     st.session_state.current_page = "Inicio"
-                    st.query_params.clear() # Reload the app
+                    st.rerun()
+                    #st.query_params.clear() # Reload the app
                     
             with col2:
                 if st.button("Não Concordo", type='secondary'):
                     st.session_state.show_agree_buttons = False
                     st.session_state.agreed = False
                     st.query_params.clear() # Reload the app
+                    st.rerun()
     else:
         if not st.session_state.agreed:
             st.error("O aplicativo foi encerrado!")

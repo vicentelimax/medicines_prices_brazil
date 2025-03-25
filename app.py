@@ -6,8 +6,12 @@ from pages.screens.home import home
 from pages.screens.termsOfUse import change_state, initialize_session_state, terms_of_use
 from pages.screens.calc import calc
 
+
+print(st.session_state)
 # Initialize session state variables
 initialize_session_state()
+
+print(st.session_state)
 
 pages = {
     "Inicio": home,
@@ -27,7 +31,9 @@ def main():
 
     # Check agreement before allowing access to other pages
     if not st.session_state.agreed:
+        print(st.session_state)
         terms_of_use()
+        print(st.session_state)
     else:
         # Sidebar navigation
         page = st.sidebar.radio("Navegação", list(pages.keys()), index=list(pages.keys()).index(st.session_state.current_page))
