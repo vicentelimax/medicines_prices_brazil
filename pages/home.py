@@ -49,7 +49,7 @@ def home():
     st.write("Disponível em: https://www.gov.br/anvisa/pt-br/assuntos/medicamentos/cmed/precos")
 
     if st.button("Ir para Calculadora"):
-        st.switch_page("./calc.py")
+        st.switch_page("pages/calc.py")
     
 
 

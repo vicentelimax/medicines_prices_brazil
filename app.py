@@ -2,21 +2,29 @@ import streamlit as st
 
 # Import modules
 from utils import local_css
-from pages.screens.home import home
-from pages.screens.termsOfUse import change_state, initialize_session_state, terms_of_use
-from pages.screens.calc import calc
+from pages.termsOfUse import initialize_session_state, terms_of_use
+import pages.home as home
+import pages.calculator as calc
 
-
+# Fast debbuging. DELETE LATER
 print(st.session_state)
+
 # Initialize session state variables
 initialize_session_state()
 
-print(st.session_state)
-
 pages = {
-    "Inicio": home,
-    "Calc": calc,
+    "Inicio": home.home,
+    "Calc": calc.calc,
 }
+
+def navigate_too(page_name):
+    """ Change the current page in session state.
+    """
+    st.session_state.current_page = page_name
+
+    # Fast debbuging. DELETE LATER
+    print(f"Page changed to: {st.session_state.current_page}")
+
 
 def main():
     # Set page configuration
@@ -31,15 +39,19 @@ def main():
 
     # Check agreement before allowing access to other pages
     if not st.session_state.agreed:
-        print(st.session_state)
         terms_of_use()
-        print(st.session_state)
     else:
+
         # Sidebar navigation
-        page = st.sidebar.radio("Navegação", list(pages.keys()), index=list(pages.keys()).index(st.session_state.current_page))
-        change_state("Inicio", page)  # Save the current page in session state
+        page = st.sidebar.radio(
+            "Navegação", 
+            list(pages.keys()), 
+            index=list(pages.keys()).index(st.session_state.current_page),
+            on_change=lambda: navigate_too(page),
+            )
+        
         # Render the selected page
-        pages[page]()
+        pages[st.session_state.current_page]()
 
 # Run the app
 if __name__ == "__main__":
