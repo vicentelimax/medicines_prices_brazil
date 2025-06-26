@@ -6,8 +6,6 @@ from pages.termsOfUse import initialize_session_state, terms_of_use
 import pages.home as home
 import pages.calculator as calc
 
-# Fast debbuging. DELETE LATER
-print(st.session_state)
 
 # Initialize session state variables
 initialize_session_state()

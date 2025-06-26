@@ -1,7 +1,7 @@
 import streamlit as st
 
 # Import modules
-from pages.tools.share_data import load_data
+from pages.tools.load_data import load_data
 from pages.tools.filterSelectBox import apply_filter_select_box
 from pages.tools.filter_state import apply_state_filter
 from pages.tools.factor_price import add_factor_price
@@ -17,6 +17,7 @@ def home():
             df = load_data()
         except:
             st.error('Erro ao carregar dados de preços de medicamentos da ANVISA. Tente novamente mais tarde.')
+            
             return
     st.success('Dados carregados com sucesso! Fonte: CMED, ANIVSA')
 
@@ -49,7 +50,7 @@ def home():
     st.write("Disponível em: https://www.gov.br/anvisa/pt-br/assuntos/medicamentos/cmed/precos")
 
     if st.button("Ir para Calculadora"):
-        st.switch_page("pages/calc.py")
-    
+        st.session_state.current_page = "Calc"
+
 
 

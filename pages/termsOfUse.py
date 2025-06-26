@@ -74,7 +74,7 @@ def terms_of_use():
         if st.button("Concordo"):
             st.session_state.agreed = True
             st.session_state.current_page = "Inicio"  # Define a página inicial após aceitar os termos
-            st.query_params.clear() # Reload the app
+            st.query_params.clear()  # Limpa os parâmetros da URL
             st.rerun()  # Recarrega o app para aplicar a mudança
     with col2:
         if st.button("Não Concordo"):

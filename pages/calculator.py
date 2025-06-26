@@ -42,7 +42,7 @@ def calc():
     column_to_filter_tax_state = apply_state_filter(filtered_df)
 
     # I need to transform now the column to float to show as float number too
-    filtered_df[column_to_filter_tax_state] = filtered_df[column_to_filter_tax_state].astype(float)
+    filtered_df.loc[:, column_to_filter_tax_state] = filtered_df[column_to_filter_tax_state].astype(float)
 
     # Display the filtered data with the selected column
     filtered_df = filtered_df[['PRODUTO','APRESENTAÇÃO', column_to_filter_tax_state, 'fator']]
@@ -57,32 +57,47 @@ def calc():
 
     st.write("Disponível em: https://www.gov.br/anvisa/pt-br/assuntos/medicamentos/cmed/precos")
 
-    # Doses
-    doses = st.number_input(
-        key="doses",
-        label="Número de Unidades Unitárias",
-        value=1,
-        min_value=1,
-        max_value=1000
-    )
+    col1, col2 = st.columns(2, vertical_alignment='center')
+    with col1:
+        # Doses
+        doses = st.number_input(
+            key="doses",
+            label="Número de Unidades Unitárias por Dose.",
+            value=1,
+            min_value=1,
+            max_value=1000
+        )
+    with col2:
+        # Frequency
+        frequency = st.number_input(
+            key="frequency",
+            label="Frequência de Administração em dias.",
+            value=30,
+            min_value=1,
+            max_value=365
+        )
+    
+    col1, col2 = st.columns(2, vertical_alignment='center')
+    st.write("Duração total do Tratamento.")
+    with col1:
+        options = ["Dias", "Meses", "Anos"]
+        selection = st.segmented_control(
+            "Tempo", options, selection_mode="single",
+            default="Dias"
+        )
+        st.markdown(f"Your selected options: {selection}.")
+        
+    with col2:
+        # Duration
+        duration = st.number_input(
+            key="duration",
+            label="Duração total do Tratamento em dias",
+            value=365,
+            min_value=1,
+            max_value=365
+        )
 
-    # Frequency
-    frequency = st.number_input(
-        key="frequency",
-        label="Frequência de Administração em dias",
-        value=30,
-        min_value=1,
-        max_value=365
-    )
 
-    # Duration
-    duration = st.number_input(
-        key="duration",
-        label="Duração total do Tratamento em dias",
-        value=365,
-        min_value=1,
-        max_value=365
-    )
 
     def show_brazil_format_number(number):
         # Configura o locale para o padrão brasileiro
@@ -131,6 +146,7 @@ def calc():
         st.session_state.basket = []
         st.success("Cesta de comparação limpa com sucesso!")
         st.query_params.clear()
+        st.rerun()
 
     st.button("Limpar Cesta", on_click=clear_basket)
     if 'basket' in st.session_state and len(st.session_state.basket) == 0:
